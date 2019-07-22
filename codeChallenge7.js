@@ -13,8 +13,10 @@
         }
     }
     
+
     Question.prototype.checkAnswer = function(ans) {
         if (ans === this.correctAnswer) {
+            score++;
             console.log('Correct answer');
         } else {
             console.log('Incorrect answer');
@@ -26,13 +28,19 @@
     var question3 = new Question('Who teaches this course?', ['John', 'Micheal', 'Jonas'], 2);
     
     var questionList = [question1, question2, question3];
+
+    var score = 0;
+    while (questionList.length) {
+        var n = Math.floor(Math.random() * questionList.length);
+        questionList[n].displayQuestion();
+        var answer = parseInt(prompt('Please select the correct answer.'));
+        questionList[n].checkAnswer(answer);
+        console.log('User current score is ' + score);
+        questionList.splice(n, 1);
+    } 
+    if (!questionList.length) {
+        console.log('No more questions');
+    }
     
-    var n = Math.floor(Math.random() * questionList.length);
-    
-    questionList[n].displayQuestion();
-    
-    var answer = parseInt(prompt('Please select the correct answer.'));
-    
-    questionList[n].checkAnswer(answer);
 })();
 
