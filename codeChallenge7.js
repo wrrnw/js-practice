@@ -1,35 +1,38 @@
 
-var Question = function(question, answerList, correctAnswer) {
-    this.question = question;
-    this.answerList = answerList;
-    this.correctAnswer = correctAnswer;
-}
-
-
-var question1 = new Question('Is programming fun?', ['yes', 'no'], 1);
-var question2 = new Question('Is your wife beautiful?', ['yes', 'no'], 1);
-
-
-
-var questionList = [question1, question2];
-
-console.log(questionList[0].question);
-
-function render(questionList) {
-    questionNumbers = questionList.length;
-    pickedQuestion = questionList[Math.floor(Math.random() * questionNumbers)];
-    console.log('Question: ' + pickedQuestion.question);
-    console.log('Answsers: ');
-    for (var i = 0; i < pickedQuestion.answerList.length; i++) {
-        console.log(i+1 + '. ' + pickedQuestion.answerList[i]);
+(function() {
+    var Question = function(question, answerList, correctAnswer) {
+        this.question = question;
+        this.answerList = answerList;
+        this.correctAnswer = correctAnswer;
     }
-    var text = prompt('your answser is (put question number)');
-    console.log(text);
-    if (text == pickedQuestion.correctAnswer) {
-        console.log('Congraduation! Your answer is correct');
-    } else {
-        console.log('Incorrect! :(');
+    
+    Question.prototype.displayQuestion = function() {
+        console.log(this.question);
+        for (var i = 0; i < this.answerList.length; i++) {
+            console.log(i + '. ' + this.answerList[i]);
+        }
     }
-}
+    
+    Question.prototype.checkAnswer = function(ans) {
+        if (ans === this.correctAnswer) {
+            console.log('Correct answer');
+        } else {
+            console.log('Incorrect answer');
+        }
+    }
+    
+    var question1 = new Question('Is programming fun?', ['yes', 'no'], 0);
+    var question2 = new Question('Is your wife beautiful?', ['yes', 'no'], 0);
+    var question3 = new Question('Who teaches this course?', ['John', 'Micheal', 'Jonas'], 2);
+    
+    var questionList = [question1, question2, question3];
+    
+    var n = Math.floor(Math.random() * questionList.length);
+    
+    questionList[n].displayQuestion();
+    
+    var answer = parseInt(prompt('Please select the correct answer.'));
+    
+    questionList[n].checkAnswer(answer);
+})();
 
-render(questionList);
