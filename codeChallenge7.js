@@ -14,33 +14,55 @@
     }
     
 
-    Question.prototype.checkAnswer = function(ans) {
+    Question.prototype.checkAnswer = function(ans, callback) {
+        var sc;
         if (ans === this.correctAnswer) {
-            score++;
             console.log('Correct answer');
+            sc = callback(true);
         } else {
             console.log('Incorrect answer');
+            sc = callback(false);
         }
+        this.displayScore(sc);
     }
+
     
+    Question.prototype.displayScore = function(score) {
+        console.log('Your current score is: ' + score);
+        console.log('-----------------------------');
+    }
+
     var question1 = new Question('Is programming fun?', ['yes', 'no'], 0);
     var question2 = new Question('Is your wife beautiful?', ['yes', 'no'], 0);
     var question3 = new Question('Who teaches this course?', ['John', 'Micheal', 'Jonas'], 2);
     
     var questionList = [question1, question2, question3];
 
-    var score = 0;
-    while (questionList.length) {
+    function score() {
+        var sc = 0;
+        return function(correct) {
+            if (correct) {
+                sc ++;
+            }
+            return sc;
+        }
+    }
+
+    var keepScore = score();
+
+    function nextQuestion() {
         var n = Math.floor(Math.random() * questionList.length);
         questionList[n].displayQuestion();
-        var answer = parseInt(prompt('Please select the correct answer.'));
-        questionList[n].checkAnswer(answer);
-        console.log('User current score is ' + score);
-        questionList.splice(n, 1);
-    } 
-    if (!questionList.length) {
-        console.log('No more questions');
+        var answer = prompt('Please select the correct answer.');
+        
+        if (answer !== 'exit') {
+            questionList[n].checkAnswer(parseInt(answer), keepScore);
+            nextQuestion();
+        }  
     }
+
+    nextQuestion();
+
     
 })();
 
